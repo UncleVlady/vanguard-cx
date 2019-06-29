@@ -1,0 +1,61 @@
+//cx for microview (64x48)
+
+#include <MicroView.h>
+
+MicroViewWidget *progressbar;
+
+long total = 3024000;
+long left = 1537200; //in sec from 17:00 29.06.19
+long week;
+long day;
+long hour;
+long min;
+long sec;
+
+float perc;
+
+void setup() {
+
+	uView.begin();		// init and start MicroView
+
+	uView.clear(PAGE);	// erase the memory buffer, when next uView.display() is called, the OLED will be cleared.
+
+	progressbar = new MicroViewSlider(0,28,0,100);		// declare widget0 as a Slider at x=0, y=0, min=0, max=100
+
+}
+
+void loop() {
+
+week = left/604800;
+day = (left - week*604800)/86400;
+hour = (left-week*604800-day*86400)/3600;
+min = (left-week*604800-day*86400-hour*3600)/60;
+sec = left-week*604800-day*86400-hour*3600-min*60;
+
+perc = (left*100)/total;
+
+uView.setCursor(27,10);
+uView.print("Time left:");
+uView.setCursor(0,20);
+uView.print(week);
+uView.print(" W ");
+uView.print(day);
+uView.print(" D ");
+uView.print(hour);
+uView.print(" H ");
+uView.print(min);
+uView.print(" M ");
+uView.print(sec);
+uView.print(" S ");
+
+
+progressbar->setValue(perc);
+
+		uView.display();
+
+
+
+
+
+
+}
